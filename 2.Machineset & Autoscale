@@ -1,0 +1,43 @@
+oc get machineset -n openshift-machine-api
+
+oc scale machineset -n openshift-machine-api aro-elevate-pub-ft4s4-worker-eastus3 --replicas=2
+
+deepak@DESKTOP-JS1N88M:~/otaljund-aro-scripts/scripts/aro-elevate$ oc get machine -n openshift-machine-api
+NAME                                         PHASE         TYPE              REGION   ZONE   AGE
+aro-elevate-pub-ft4s4-master-0               Running       Standard_D8s_v3   eastus   1      84m
+aro-elevate-pub-ft4s4-master-1               Running       Standard_D8s_v3   eastus   2      84m
+aro-elevate-pub-ft4s4-master-2               Running       Standard_D8s_v3   eastus   3      84m
+aro-elevate-pub-ft4s4-worker-eastus1-rqhrh   Running       Standard_D4s_v3   eastus   1      80m
+aro-elevate-pub-ft4s4-worker-eastus2-747tr   Running       Standard_D4s_v3   eastus   2      80m
+aro-elevate-pub-ft4s4-worker-eastus3-6g4z2   Provisioned   Standard_D4s_v3   eastus   3      11s
+aro-elevate-pub-ft4s4-worker-eastus3-cvvb6   Running       Standard_D4s_v3   eastus   3      80m
+
+or
+
+oc edit machineset -n openshift-machine-api <machineset> #modify replicas
+
+oc get machineset -n openshift-machine-api
+
+oc get machine -n openshift-machine-api
+
+oc apply -f - <<EOF
+apiVersion: autoscaling.openshift.io/v1
+kind: ClusterAutoscaler
+metadata:
+  name: default
+spec:
+  resourceLimits:
+    maxNodesTotal: 10
+  scaleDown:
+    delayAfterAdd: 10m
+    delayAfterDelete: 5m
+    delayAfterFailure: 10s
+    enabled: true
+EOF
+
+oc explain clusterautoscaler.spec.scaleDown.delayAfterDelete
+
+oc get clusterautoscaler
+
+#Create MachineAutoscaler from the Console
+

@@ -1,0 +1,42 @@
+RESOURCEGROUP=aro-elevate-pub-rg
+CLUSTER=aro-elevate-pub
+
+az aro list-credentials --name $CLUSTER --resource-group $RESOURCEGROUP
+
+https://learn.microsoft.com/en-us/azure/openshift/tutorial-connect-cluster#connect-to-the-cluster
+
+apiServer=$(az aro show -g $RESOURCEGROUP -n $CLUSTER --query apiserverProfile.url -o tsv)
+
+echo $apiServer
+
+oc login https://api.d1hb2uyp.eastus.aroapp.io:6443/ -u kubeadmin -p 5Gn4C-wv5R5-gPt27-o8S5q
+
+oc whoami
+
+Token 
+
+oc whoami -t 
+
+oc get useroauthaccesstokens
+
+oc get oauthaccesstokens
+
+contexts
+
+cd ~/.kube
+
+oc config get-contexts
+
+cat config
+
+oc config -h
+
+oc config view
+
+oc project openshift
+
+oc config get-contexts
+
+oc config use-context <context>
+
+oc get pod

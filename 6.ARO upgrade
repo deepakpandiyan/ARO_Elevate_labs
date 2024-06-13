@@ -1,0 +1,7 @@
+Pre checks before cluster upgrade
+
+oc get mcp
+
+oc get co
+
+oc get pdb -A

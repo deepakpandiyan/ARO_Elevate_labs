@@ -1,0 +1,26 @@
+Importing Images
+
+#az acr import  --name samarth.azurecr.io --source docker.io/bitnami/nginx:latest --image bitnami-nginx:elevate
+
+oc new-project acr-project
+
+oc project acr-project
+
+oc create secret docker-registry acr-secret --docker-server=samarth.azurecr.io --docker-username=samarth --docker-password=<>
+
+oc get secret acr-secret
+
+oc secrets link default acr-secret --for=pull
+
+oc apply -f - <<EOF
+apiVersion: v1
+kind: Pod
+metadata:
+  name: acr-pod
+spec:
+  containers:
+  - name: acr-pod
+    image: samarth.azurecr.io/bitnami-nginx:elevate
+  imagePullSecrets:
+  - name: acr-secret
+EOF

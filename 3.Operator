@@ -1,0 +1,26 @@
+az role assignment create --assignee a8f64132-04b2-421b-9b9d-726bf603889c --role "Contributor" --scope /subscriptions/9df631de-6085-4979-9b64-74c35136d19b
+
+oc apply -f - <<EOF
+apiVersion: v1
+kind: Secret
+metadata:
+  name: azureoperatorsettings
+  namespace: openshift-operators
+stringData:
+  AZURE_TENANT_ID: 72f988bf-86f1-41af-91ab-2d7cd011db47
+  AZURE_SUBSCRIPTION_ID: 9df631de-6085-4979-9b64-74c35136d19b
+  AZURE_CLIENT_ID: a8f64132-04b2-421b-9b9d-726bf603889c
+  AZURE_CLIENT_SECRET: AST8Q~JYEPf3XpXTlnmqiCmytZtgIV3dZB~ekcf8
+  AZURE_CLOUD_ENV: AzurePublicCloud
+EOF
+
+oc get secrets -n openshift-operators
+
+oc get pod -n openshift-operators
+
+oc api-resources  | grep -i azure
+
+oc get resourcegroup -a
+oc delete resourcegroup -n openshift-operators  
+oc delete secret azureoperatorsettings -n openshift-operators
+oc get pod -n openshift-operators
